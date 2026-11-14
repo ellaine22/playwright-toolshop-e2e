@@ -1,5 +1,7 @@
 # playwright-toolshop-e2e
 
+[![Playwright](https://github.com/ellaine22/playwright-toolshop-e2e/actions/workflows/playwright.yml/badge.svg)](https://github.com/ellaine22/playwright-toolshop-e2e/actions/workflows/playwright.yml)
+
 End-to-end and API tests for the [Practice Software Testing Toolshop](https://practicesoftwaretesting.com), a demo e-commerce app for hand tools. Written in TypeScript with Playwright Test.
 
 ## What's covered
