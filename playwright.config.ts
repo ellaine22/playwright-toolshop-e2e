@@ -5,6 +5,11 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
+  // practicesoftwaretesting.com sits behind a Cloudflare bot challenge that returns 403
+  // for direct visits to inner pages from datacenter IPs, which includes GitHub's runners.
+  // Tests that open /product, /checkout or /account directly are tagged @deep-link and
+  // only run outside CI. See "Running in CI" in the README.
+  grepInvert: process.env.CI ? /@deep-link/ : undefined,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 2 : undefined,
   timeout: 45_000,

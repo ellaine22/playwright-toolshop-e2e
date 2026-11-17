@@ -12,7 +12,7 @@ test.describe('Cart', () => {
     await expect(header.cartQuantity).toHaveText('1');
   });
 
-  test('line totals and cart total add up', async ({ api, productPage, header, checkout }) => {
+  test('line totals and cart total add up', { tag: '@deep-link' }, async ({ api, productPage, header, checkout }) => {
     const pliers = await api.findProductByName('Combination Pliers');
     const hammer = await api.findProductByName('Claw Hammer');
 
@@ -32,7 +32,7 @@ test.describe('Cart', () => {
     expect(await checkout.total()).toBeCloseTo(lines.reduce((a, b) => a + b, 0), 2);
   });
 
-  test('removing the last item empties the cart', async ({ page, api, productPage, header, checkout }) => {
+  test('removing the last item empties the cart', { tag: '@deep-link' }, async ({ page, api, productPage, header, checkout }) => {
     const product = await api.findProductByName('Combination Pliers');
     await productPage.goto(product.id);
     await productPage.add();

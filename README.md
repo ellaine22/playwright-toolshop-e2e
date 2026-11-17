@@ -53,9 +53,10 @@ tests/
 
 ## Running
 
-Requires Node 20+.
+Requires a patched Node release: 22.23.5+, 24.22.3+ or 26.13.1+. Older builds still trust the compromised eMudhra intermediate CA, and miss the November 2026 security fixes. `.nvmrc` pins 24.22.3, so `nvm use` picks it up.
 
 ```bash
+nvm use
 npm install
 npx playwright install
 
@@ -76,4 +77,16 @@ CUSTOMER_EMAIL=me@example.com CUSTOMER_PASSWORD=secret npm test
 
 ## CI
 
-`.github/workflows/playwright.yml` runs typecheck and lint first. Then API tests run in one job, and the UI tests are sharded across Chromium and Firefox (2 shards each). It also runs nightly to catch changes to the demo site. HTML reports are uploaded for every run. Traces are recorded on the first retry, so failures in CI can be opened in the trace viewer.
+`.github/workflows/playwright.yml` runs typecheck and lint first. Then API tests run in one job, and the UI tests are sharded across Chromium and Firefox (2 shards each). It also runs nightly to catch changes to the demo site. HTML reports are uploaded for every run. Traces are recorded on the first retry, so failures in CI can be opened in the trace viewer. Node comes from `.nvmrc`, so CI and local runs use the same patched release.
+
+### Tests that only run locally
+
+practicesoftwaretesting.com sits behind a Cloudflare bot challenge that returns 403 when an inner page like `/product/<id>`, `/checkout` or `/account` is opened directly from a datacenter IP, which includes GitHub's runners. Starting at the home page and clicking through is not challenged.
+
+Tests that open those pages directly are tagged `@deep-link`, and `playwright.config.ts` skips that tag when `CI` is set. That's 6 of the 19 UI tests: signing in and out, the two cart-total tests, and checkout. They run normally on a developer machine. To run exactly what CI runs:
+
+```bash
+CI=1 npm run test:ui
+```
+
+The alternative is to run the UI tests against a copy of the Toolshop started in CI from its [open-source Docker setup](https://github.com/testsmith-io/practice-software-testing). That would let everything run in CI, at the cost of a much slower pipeline.

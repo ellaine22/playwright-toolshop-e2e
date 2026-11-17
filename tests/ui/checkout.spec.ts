@@ -4,7 +4,7 @@ import { AUTH_FILE } from '../../src/data/users';
 
 test.use({ storageState: AUTH_FILE });
 
-test.describe('Checkout', () => {
+test.describe('Checkout', { tag: '@deep-link' }, () => {
   test.beforeEach(async ({ api, productPage, header }) => {
     const product = await api.findProductByName('Combination Pliers');
     await productPage.goto(product.id);

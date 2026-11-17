@@ -6,7 +6,7 @@ test.describe('Login form', () => {
     await loginPage.goto();
   });
 
-  test('signs in a customer and opens My Account', { tag: '@smoke' }, async ({ page, loginPage, header }) => {
+  test('signs in a customer and opens My Account', { tag: ['@smoke', '@deep-link'] }, async ({ page, loginPage, header }) => {
     await loginPage.login(customer);
 
     await expect(page).toHaveURL(/\/account$/);
@@ -36,7 +36,7 @@ test.describe('Login form', () => {
 test.describe('Signed in', () => {
   test.use({ storageState: AUTH_FILE });
 
-  test('signs out and returns to the login page', async ({ page, header }) => {
+  test('signs out and returns to the login page', { tag: '@deep-link' }, async ({ page, header }) => {
     await page.goto('/account');
     await header.logout();
 
